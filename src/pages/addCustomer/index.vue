@@ -35,13 +35,11 @@
 <script>
 import studentsFrom from "./components/studentsFrom";
 import parentsFrom from "./components/parentsFrom.vue";
-import inputWrap from "components/inputWrap/index.vue";
 import { constants } from "crypto";
 export default {
   components: {
     studentsFrom,
-    parentsFrom,
-    inputWrap
+    parentsFrom
   },
   data() {
     return {

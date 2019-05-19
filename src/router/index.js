@@ -24,7 +24,7 @@ const Tagmanage = () =>({
     component:import('@/pages/tagManage/index')
 })
 const Permission = () => ({
-    component: import('@/pages/error/permission.vue'),
+    component: import('@/pages/permission'),
     loading: Loading
 });
 const Login = () => ({

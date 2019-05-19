@@ -62,7 +62,7 @@
     </el-form-item>
 
     <p class="subject" style="margin-top:30px;">科目信息</p>
-    <input-wrap
+    <subject-infor
       v-for="(item,index) in form.subjectList"
       :xindex="index"
       :key="'input-'+index"
@@ -83,24 +83,24 @@
       @onAddTrain="onAddTrain"
       @onDeleteTrain="(value)=>onDeleteTrain(value,index)"
       :traingWrapList="form.trainingList"
-    ></training-record>
+    />
     <tag-toast
       :delVisible="delVisible"
       :tagTitle="tagTitle"
       @onCancel="onCancel"
       @tagConfirm="tagConfirm"
       :tagCompilations="tagCompilations"
-    ></tag-toast>
+    />
   </el-form>
 </template>
 <script>
 import tagToast from "components/tagToast/index.vue";
-import inputWrap from "components/inputWrap/index.vue";
-import trainingRecord from "components/trainingRecord/index.vue";
+import subjectInfor from "./subjectInfor/index.vue";
+import trainingRecord from "./trainingRecord/index.vue";
 export default {
   components: {
     tagToast,
-    inputWrap,
+    subjectInfor,
     trainingRecord
   },
   props: {

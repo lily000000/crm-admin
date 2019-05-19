@@ -130,7 +130,8 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-      this.tagItem = [];
+      console.log(form);
+      //this.tagItem = [];
     }
   }
 };

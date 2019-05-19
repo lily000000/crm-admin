@@ -1,5 +1,5 @@
-import { message } from 'antd';
-import {browserHistory} from "react-router";
+import { Message } from 'element-ui';
+import router from "../router/index";
 export const reqHeader = {
   'Accept': '*/*',
   mode: 'cors',
@@ -11,11 +11,14 @@ export function authBeforeRes(response) {
         case 200:
             return response;
         case 302:
-            message.info('登录超时, 请重新登录！');
+             Message({
+                message: '登录超时, 请重新登录！',
+                type: 'warning'
+             });
         case 401:
-            browserHistory.push('/login');
+            router.push('/login');
         case 403:
-            browserHistory.push('/login');
+            router.push('/login');
         default:
             if (process.env.NODE_ENV !== 'production') {
                 console.error('Request error: ', response.code, response.message)
