@@ -10,25 +10,25 @@ const Home = () => ({
     loading: Loading
 });
 const Analysis = () => ({
-    component: import('@/pages/analysis/analysis'),
+    component: import('@/pages/analysis/index'),
     loading: Loading
 });
 const Customer = () => ({
-    component: import('@/pages/customer/customer'),
+    component: import('@/pages/customer/index'),
     loading: Loading
 });
 const Addcustomer = () =>({
-    component:import('@/pages/addcustomer/addcustomer')
+    component:import('@/pages/addCustomer/index')
 })
 const Tagmanage = () =>({
-    component:import('@/pages/tagmanage/tagmanage')
+    component:import('@/pages/tagManage/index')
 })
 const Permission = () => ({
-    component: import('@/pages/error/Permission'),
+    component: import('@/pages/error/permission.vue'),
     loading: Loading
 });
 const Login = () => ({
-    component: import('@/pages/login/login'),
+    component: import('@/pages/login/index'),
     loading: Loading
 });
 const page404 = () => ({

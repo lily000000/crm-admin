@@ -57,7 +57,7 @@
             <el-button @click="onRedact" type="text" size="small">编辑</el-button>
             <el-button type="text" size="small" @click="onTag">打标签</el-button>
             <el-button type="text" size="small" @click="onfollow">跟进记录</el-button>
-            <el-button @click="handleClick(scope.row)" type="text" size="small">新增推课</el-button>
+            <el-button @click="onAddLesson(scope.row)" type="text" size="small">新增推课</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -112,7 +112,7 @@
       @onCancel="onCancel"
       @tagConfirm="tagConfirm"
     ></follow-toast>
-    <add-lesson :lessonToast="lessonToast" :form="form"></add-lesson>
+    <add-lesson :lessonToast="lessonToast" :form="form" :lessonstate="lessonstate"></add-lesson>
   </div>
 </template>
 <script>
@@ -140,8 +140,9 @@ export default {
       tagItem: [],
       tagTitle: "打标签",
       followUptoast: false,
-      lessonToast:true,
+      lessonToast: false,
       reverse: true,
+      lessonstate: false,
       activities: [
         {
           content: "活动按期开始",
@@ -191,15 +192,15 @@ export default {
         resource: "",
         desc: "",
         cont: "",
-        gender:""
+        gender: ""
       }
     };
   },
   mounted() {
     this.getCustomerTables();
-      this.$API.getCustomer().then(res => {
-        console.log(res)
-      });
+    this.$API.getCustomer().then(res => {
+      console.log(res);
+    });
   },
   methods: {
     //客户管理表格数据请求
@@ -218,16 +219,12 @@ export default {
           this.loading = false;
         }
       });
-      
     },
     //重置
     onReset() {
       this.search = "";
       this.pageNo = 1;
       this.getCustomerTables();
-    },
-    handleClick(row) {
-      console.log(row);
     },
     //搜索
     onSearch() {
@@ -236,18 +233,15 @@ export default {
     },
     //新增客户
     addcustomer() {
-      alert(1);
-      this.$router.push({ path: "/addcustomer", query: { id: 1 } });
+      this.$router.push({ path: "/addcustomer", query: { type: 1 } });
     },
     //编辑
     onRedact() {
-      alert(2);
-      this.$router.push({ path: "/addcustomer", query: { id: 2 } });
+      this.$router.push({ path: "/addcustomer", query: { type: 2 } });
     },
     //查看客户
     onSee() {
-      alert(3);
-      this.$router.push({ path: "/addcustomer", query: { id: 3 } });
+      this.$router.push({ path: "/addcustomer", query: { type: 3 } });
     },
     onCancel() {
       this.delVisible = false;
@@ -292,9 +286,18 @@ export default {
     onSubmit() {
       console.log("submit!");
     },
+    //新增推课
+    onAddLesson(row) {
+      console.log(row);
+      this.lessonstate = true;
+      this.lessonToast = true;
+    },
     //查看推课
     onPushClass(cont) {
       console.log("查看推课", cont);
+      this.lessonstate = false;
+      console.log('eeeee',this.lessonstate)
+      this.lessonToast = true;
     },
     //请求第几页
     handleCurrentChange(currentPage) {
@@ -313,7 +316,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "./customer.scss";
+@import "./style.scss";
 </style>
 
 

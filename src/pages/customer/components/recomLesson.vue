@@ -1,79 +1,137 @@
 <template>
-  <el-form ref="form" :model="form" label-width="80px">
-    <p class="addClass">追加课程</p>
+  <el-form ref="form" :model="form" label-width="80px" class="from-wrap">
+    <div class="add-class">
+      <p v-show="xindex == classWrapList.length-1">
+        <span @click="onAddClass">追加课程</span>
+      </p>
+    </div>
     <div class="form-item">
-      <el-form-item label="学习需求">
-        <el-select v-model="form.gender" placeholder="请选择性别" style="width:90px" >
-          <el-option label="男" value="男"></el-option>
-          <el-option label="女" value="女"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="学习期望">
-        <el-select v-model="form.gender" placeholder="请选择性别" style="width:90px">
-          <el-option label="男" value="男"></el-option>
-          <el-option label="女" value="女"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="学习需求">
-        <el-select v-model="form.gender" placeholder="请选择性别" style="width:90px" >
-          <el-option label="男" value="男"></el-option>
-          <el-option label="女" value="女"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="学习期望">
-        <el-select v-model="form.gender" placeholder="请选择性别" style="width:90px">
-          <el-option label="男" value="男"></el-option>
-          <el-option label="女" value="女"></el-option>
+      <el-form-item label="类目">
+        <el-select v-model="form.name1" placeholder="请选择" style="width:90px">
+          <el-option label="英语类" value="男"></el-option>
+          <el-option label="思维类" value="女"></el-option>
         </el-select>
       </el-form-item>
     </div>
     <div class="form-item">
+      <el-form-item label="机构">
+        <el-select v-model="form.name1" placeholder="请选择" style="width:90px">
+          <el-option label="机构1" value="男"></el-option>
+          <el-option label="机构2" value="女"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="课程">
+        <el-select v-model="form.name2" placeholder="请选择" style="width:90px">
+          <el-option label="课程1" value="男"></el-option>
+          <el-option label="课程2" value="女"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="手机号">
+        <el-input type="text" v-model="form.name6" style="width:90px" ></el-input>
+      </el-form-item>
+      <el-form-item label="状态">
+        <el-select v-model="form.name4" placeholder="请选择" style="width:90px">
+          <el-option label="未试听" value="男"></el-option>
+          <el-option label="试听未报名" value="女"></el-option>
+        </el-select>
+      </el-form-item>
     </div>
     <div class="form-item">
-      <el-form-item label="学情分析">
-         <el-input type="text" v-model="form.desc" style="width:200px" placeholder="请输入学情分析"></el-input>
+      <el-form-item label="试听账号">
+        <el-input type="text" v-model="form.name5" style="width:200px" placeholder="请输入试听账号"></el-input>
       </el-form-item>
-      <el-form-item label="学情分析">
-        <el-input type="text" v-model="form.desc" style="width:200px" placeholder="请输入学情分析"></el-input>
+      <el-form-item label="试听密码">
+        <el-input type="text" v-model="form.name6" style="width:200px" placeholder="请输入试听密码"></el-input>
       </el-form-item>
     </div>
-     <div class="form-item">
-      <el-form-item label="学情分析">
-         <el-input type="textarea" v-model="form.desc" style="width:600px" placeholder="请输入学情分析"></el-input>
-          <p class="addClass">新增试听分析</p>
+    <div class="form-item">
+      <el-form-item label-width="15px">
+        <div>试听分析记录</div>
+        <div v-for="(item,index) in form.name7" :key="index" class="analyzetext">
+          <el-input
+            type="textarea"
+            style="width:650px"
+            v-model="form.name7[index]"
+            placeholder="请输入试听分析记录"
+            maxlength="30"
+            show-word-limit
+          ></el-input>
+        </div>
+        <!-- v-model="form.name7" -->
+
+        <p class="add-class add-audition">
+          <span @click="addAnalyze">新增试听分析</span>
+        </p>
       </el-form-item>
-     
     </div>
   </el-form>
 </template>
 <script>
 export default {
+  props: {
+    classWrapList: {
+      type: Array
+    },
+    xindex: {
+      type: Number
+    }
+    // readonly:{
+    //   type: Boolean
+    // }
+  },
   data() {
     return {
       form: {
-        gender: "",
-        desc: ""
+        name1: "",
+        name2: "",
+        name3: "",
+        name4: "",
+        name5: "",
+        name6: "",
+        name7: [""]
       }
     };
+  },
+  methods: {
+    onAddClass() {
+      this.$emit("onAddClass");
+    },
+    addAnalyze() {
+      this.form.name7.push("");
+    }
+  },
+  watch: {
+    form: {
+      deep: true,
+      handler: function(val) {
+        this.$emit("onChange", val);
+      }
+    }
   }
 };
 </script>
 <style lang="scss" scoped>
-.form-item {
-  display: flex;
-  justify-content: flex-start;
-}
-.addClass{
-  text-align: right;
-  color: #409EFF;
-  margin-bottom: 10px;
-  padding-top: 10px;
-  padding-right: 10px;
-}
-form{
-  background:rgb(244, 244, 244);
+.from-wrap {
+  background: rgb(244, 244, 244);
   margin-top: 10px;
-
+  border-radius: 8px;
+  .form-item {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .add-class {
+    text-align: right;
+    color: #409eff;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-right: 10px;
+  }
+  .add-audition {
+    margin-bottom: 0px !important;
+  }
+  .analyzetext {
+    margin-top: 10px;
+  }
 }
 </style>
 

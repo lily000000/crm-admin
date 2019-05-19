@@ -10,7 +10,8 @@ module.exports = {
     proxy: {
       "/crm": {
         // target: "168.12.2.1",
-        target: "http://192.168.20.182:8080",
+       target: "http://192.168.20.85:9090",
+       //  target: "http://192.168.20.100:8000",
         changeOrigin: true,
         pathRewrite: {
           '^/crm': '/crm'

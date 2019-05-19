@@ -12,13 +12,13 @@
         <el-input v-model="form.name" style="width:200px" placeholder="请输入家长姓名"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-        <el-select v-model="form.gender" placeholder="请选择性别" style="width:200px">
+        <el-select v-model="form.sex" placeholder="请选择性别" style="width:200px">
           <el-option label="男" value="男"></el-option>
           <el-option label="女" value="女"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="学生年级" label-width="100px">
-        <el-select v-model="form.gender" placeholder="请输入学生年级" style="width:200px">
+        <el-select v-model="form.grade" placeholder="请输入学生年级" style="width:200px">
           <el-option label="一年级" value="一年级"></el-option>
           <el-option label="二年级" value="二年级"></el-option>
         </el-select>
@@ -26,20 +26,20 @@
     </div>
     <div class="form-item">
       <el-form-item label="城市级联">
-        <el-cascader :options="options" v-model="form.city" style="width:200px"></el-cascader>
+        <el-cascader :options="options_1" v-model="form.city" style="width:200px" :props="cityProps"></el-cascader>
       </el-form-item>
       <el-form-item label="性格类型">
-        <el-select v-model="form.character" placeholder="请选择性格类型" style="width:200px">
+        <el-select v-model="form.personality" placeholder="请选择性格类型" style="width:200px">
           <el-option label="害羞" value="害羞"></el-option>
           <el-option label="开朗" value="开朗"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="兴趣爱好" label-width="100px">
-        <el-input v-model="form.name" style="width:200px" placeholder="请输入兴趣爱好"></el-input>
+        <el-input v-model="form.hobby" style="width:200px" placeholder="请输入兴趣爱好"></el-input>
       </el-form-item>
     </div>
     <el-form-item label="备注">
-      <el-input type="textarea" v-model="form.desc" style="width:200px"></el-input>
+      <el-input type="textarea" v-model="form.comments" style="width:200px"></el-input>
     </el-form-item>
     <el-form-item label="标签">
       <div>
@@ -63,30 +63,27 @@
 
     <p class="subject" style="margin-top:30px;">科目信息</p>
     <input-wrap
-      v-for="(item,index) in inputWrapList"
+      v-for="(item,index) in form.subjectList"
       :xindex="index"
-      :key="index"
+      :key="'input-'+index"
+      :readonly="readonly"
       @onChange="(value)=>inputChange(value,index)"
       @onAdd="onAdd"
       @onDelete="(value)=>onDelete(value,index)"
-      :inputWrapList="inputWrapList"
+      :inputWrapList="form.subjectList"
     />
 
     <p class="subject" style="margin-top:30px;">培训经历</p>
     <training-record
-      v-for="(item,index) in traingWrapList"
+      v-for="(item,index) in form.trainingList"
       :key="index+1"
       :tindex="index"
-      @trainingChange="(value)=>trainingChange(value,index)"
+      :readonly="readonly"
+      @onChange="(value)=>trainingChange(value,index)"
       @onAddTrain="onAddTrain"
       @onDeleteTrain="(value)=>onDeleteTrain(value,index)"
-      :traingWrapList="traingWrapList"
+      :traingWrapList="form.trainingList"
     ></training-record>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit">保存</el-button>
-      <el-button type="primary" @click="onSubmit">保存并新增推课</el-button>
-      <el-button>取消</el-button>
-    </el-form-item>
     <tag-toast
       :delVisible="delVisible"
       :tagTitle="tagTitle"
@@ -106,95 +103,44 @@ export default {
     inputWrap,
     trainingRecord
   },
+  props: {
+    options: {
+      type: Array
+    },
+    readonly:{
+      type:Boolean
+    },
+    title:{
+      type:String
+    },
+  },
   data() {
     return {
-      readonly: false,
+      options_1: [],
       labelPosition: "right",
-      addTitile: "新增客户",
       delVisible: false,
       tagTitle: "打标签",
       tagCompilations: false,
       childTagItem: [],
-      inputWrapList: [{}],
-      traingWrapList: [{}],
-      options: [
-        {
-          value: "guangdong",
-          label: "广东省",
-          children: [
-            {
-              value: "guangzhou",
-              label: "广州市",
-              children: [
-                {
-                  value: "tianhe",
-                  label: "天河区"
-                },
-                {
-                  value: "haizhu",
-                  label: "海珠区"
-                }
-              ]
-            },
-            {
-              value: "dongguan",
-              label: "东莞市",
-              children: [
-                {
-                  value: "changan",
-                  label: "长安镇"
-                },
-                {
-                  value: "humen",
-                  label: "虎门镇"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          value: "hunan",
-          label: "湖南省",
-          children: [
-            {
-              value: "changsha",
-              label: "长沙市",
-              children: [
-                {
-                  value: "yuelu",
-                  label: "岳麓区"
-                }
-              ]
-            }
-          ]
-        }
-      ],
+      cityProps: {
+        value: "id",
+        label: "name",
+        children: "areaList"
+      },
       form: {
+        subjectList: [{}],
+        trainingList: [{}],
+        hobby: "",
         name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        options: [],
-        delivery: false,
-        type: [],
+        id: 0, //孩子编号
+        isDeleted: false, //是否删除
+        sex: "",
         resource: 3,
-        desc: "",
-        role: "",
-        occupation: "",
-        gender: "",
+        comments: "",
+        habit: "", //学习习惯
         grade: "",
-        city: [],
-        character: "",
-        chat: "",
-        chatName: "",
-        chatNote: "",
-        parentsName: "",
-        addChatName: "",
-        parentsRole: "",
-        economicRole: "",
-        education: "",
-        appeal: "",
-        familyNum: ""
+        city: [], //所在地
+        personality: "" //性格
       },
       rules: {
         chatName: [
@@ -204,19 +150,22 @@ export default {
       }
     };
   },
-  mounted() {
-    //1新增2编辑3查看
-    console.log(this.$route.query.id);
-    if (this.$route.query.id == 1) {
-      this.readonly = false;
-      this.addTitile = "新增客户";
-    } else if (this.$route.query.id == 2) {
-      this.readonly = false;
-      this.addTitile = "编辑客户";
-    } else {
-      this.readonly = true;
-      this.addTitile = "查看信息";
+  watch: {
+    form: {
+      handler: function(newVal, oldVal) {
+        this.$emit("onChange", newVal);
+      },
+      deep: true
+    },
+    options: {
+      handler: function(newVal, oldVal) {
+        this.options_1 = [...newVal];
+      },
+      deep: true
     }
+  },
+  mounted() {
+    this.$emit("onChange", this.form);
   },
   methods: {
     onSubmit() {
@@ -240,29 +189,26 @@ export default {
       this.childTagItem.splice(index, 1);
     },
     inputChange(value, index) {
-      this.inputWrapList[index] = value;
+      this.form.subjectList[index] = value;
     },
     onAdd() {
-      this.inputWrapList = [...this.inputWrapList, {}];
-      console.log(this.inputWrapList);
+      this.form.subjectList = [...this.form.subjectList, {}];
     },
     onDelete(value, index) {
-      let newList = [...this.inputWrapList];
-      newList.splice(index, 1);
-      this.inputWrapList = newList;
+      let newList = [...this.form.subjectList];
+      newList.splice(parseInt(index), 1);
+      this.form.subjectList = newList;
     },
     trainingChange(value, index) {
-      console.log(value);
-      this.traingWrapList[index] = value;
+      this.form.trainingList[index] = value;
     },
     onAddTrain() {
-      this.traingWrapList = [...this.traingWrapList, {}];
-      console.log(this.inputWrapList);
+      this.form.trainingList = [...this.form.trainingList, {}];
     },
     onDeleteTrain(value, index) {
-      let newList = [...this.traingWrapList];
-      newList.splice(index, 1);
-      this.traingWrapList = newList;
+      let newList = [...this.form.trainingList];
+      newList.splice(parseInt(index), 1);
+      this.form.trainingList = newList;
     }
   }
 };

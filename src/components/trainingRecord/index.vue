@@ -1,30 +1,27 @@
 <template>
-  <el-form ref="form" :model="form" label-width="80px" class>
+  <el-form ref="form" :model="form" label-width="80px" :disabled="readonly" class>
     <!-- <div>当前：{{xindex}}</div> -->
-    <div class="input-wrap">
-      <el-form-item label="科目名称">
-        <el-input v-model="form.name1" style="width:200px" placeholder="请输入科目名称"></el-input>
-      </el-form-item>
-      <el-form-item label="科目满分">
-        <el-input v-model="form.name2" style="width:200px" placeholder="请输入科目满分"></el-input>
-      </el-form-item>
-    </div>
-    <div class="input-wrap">
-      <el-form-item label="学科基础">
-        <el-input v-model="form.name3" style="width:200px" placeholder="请输入学科基础"></el-input>
-      </el-form-item>
-      <el-form-item label="性别">
-        <el-input v-model="form.name4" style="width:200px" placeholder="请输入当前水平"></el-input>
-      </el-form-item>
-    </div>
-    <div class="input-wrap">
-      <el-form-item label="薄弱模块">
-        <el-input v-model="form.name5" style="width:200px" placeholder="请输入薄弱模块"></el-input>
-      </el-form-item>
-    </div>
-    <div class="btn-wrap">
-      <el-button @click="onDeleteTrain" v-if="traingWrapList.length>1">删除</el-button>
-      <el-button @click="onAddTrain" v-if="tindex==traingWrapList.length-1">添加</el-button>
+    <div class="form-wrap">
+      <div class="input-wrap">
+        <el-form-item label="培训机构">
+          <el-input v-model="form.institution" style="width:200px" placeholder="请输入培训机构"></el-input>
+        </el-form-item>
+        <el-form-item label="培训科目">
+          <el-input v-model="form.subject" style="width:200px" placeholder="请输入培训科目"></el-input>
+        </el-form-item>
+      </div>
+      <div class="input-wrap">
+        <el-form-item label="培训课程">
+          <el-input v-model="form.course" style="width:200px" placeholder="请输入培训课程"></el-input>
+        </el-form-item>
+        <el-form-item label="培训时长">
+          <el-input v-model="form.duration" style="width:200px" placeholder="请输入培训时长"></el-input>
+        </el-form-item>
+      </div>
+      <div class="btn-wrap">
+        <el-button @click="onDeleteTrain" v-if="traingWrapList.length>1">删除</el-button>
+        <el-button @click="onAddTrain" v-if="tindex==traingWrapList.length-1">添加</el-button>
+      </div>
     </div>
   </el-form>
 </template>
@@ -32,10 +29,12 @@
 import { watch } from "fs";
 export default {
   props: {
-    tindex:{
-      type:Number
+    tindex: {
+      type: Number
     },
-
+    readonly:{
+      type:Boolean
+    },
     traingWrapList: {
       type: Array
     }
@@ -44,18 +43,22 @@ export default {
     return {
       labelPosition: "right",
       form: {
-        name1: "",
-        name2: "",
-        name3: "",
-        name4: "",
-        name4: ""
+        childId:null,
+        id:null,
+        course:"",
+        createUser:null,
+        institution:"",
+        isDeleted:"",
+        duration:"",
+        subject:"",
+        updateUser:"",
       }
     };
   },
+  mounted(){
+    this.$emit("onChange", this.form);
+  },
   methods: {
-    onSubmit() {
-      console.log("submit!");
-    },
     onDeleteTrain() {
       this.$emit("onDeleteTrain");
     },
@@ -67,22 +70,32 @@ export default {
     form: {
       deep: true,
       handler: function(val) {
-        this.$emit("trainingChange", val);
+        this.$emit("onChange", val);
       }
     }
   }
 };
 </script>
 <style lang="scss" scoped>
-.input-wrap {
-  display: flex;
-  justify-content: flex-start;
-}
-.el-form-item--small .el-form-item {
-  margin-left: 15px;
-}
-.btn-wrap{
-  margin-bottom: 20px;
+.form-wrap {
+  width: 580px;
+  border-radius: 4px;
+  background: #f4f4f4;
+  padding-top: 10px;
+  .input-wrap {
+    display: flex;
+    justify-content: flex-start;
+  }
+  .el-button--small {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+  .el-form-item--small .el-form-item {
+    margin-left: 15px;
+  }
+  .btn-wrap {
+    margin-bottom: 20px;
+  }
 }
 </style>
 
